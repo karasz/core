@@ -1,0 +1,4 @@
+asciigoat.org/core
+==================
+
+helpers and general structs used by asciigoat parsers and generators
