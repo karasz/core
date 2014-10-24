@@ -74,6 +74,12 @@ func (l *Scanner) Skip() {
 	l.runes = 0
 }
 
+// Count NewLine
+func (l *Scanner) NextLine() {
+	l.cursor.Line++
+	l.cursor.Column = 1
+}
+
 // Return the next rune but not moving the cursor
 func (l *Scanner) Peek() (rune, uint) {
 	if l.cursor.Offset == uint(len(l.input)) {
