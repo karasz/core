@@ -54,6 +54,26 @@ func (l *Scanner) StepForth(runes, bytes uint) {
 	l.runes += runes
 }
 
+// Move cursor backward
+func (l *Scanner) StepBack(runes, bytes uint) {
+	l.cursor.Offset -= bytes
+	// FIXME: what if column goes < 1?
+	l.cursor.Column -= runes
+	l.runes -= runes
+}
+
+// Moves the cursor back to the back
+func (l *Scanner) Reset() {
+	l.cursor = l.base
+	l.runes = 0
+}
+
+// Trashes everything up to the cursor
+func (l *Scanner) Skip() {
+	l.base = l.cursor
+	l.runes = 0
+}
+
 // Return the next rune but not moving the cursor
 func (l *Scanner) Peek() (rune, uint) {
 	if l.cursor.Offset == uint(len(l.input)) {
