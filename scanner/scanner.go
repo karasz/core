@@ -74,8 +74,8 @@ func (l *Scanner) Skip() {
 	l.runes = 0
 }
 
-// Count NewLine
-func (l *Scanner) NextLine() {
+// NewLine accounts a line break in the position of the cursor
+func (l *Scanner) NewLine() {
 	l.cursor.Line++
 	l.cursor.Column = 1
 }
