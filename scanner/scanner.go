@@ -22,12 +22,9 @@ type Scanner struct {
 	runes  uint
 }
 
-// Creates new Scanner to parse a given string, or nil if empty
+// NewScannerFromString instantiates a new Scanner to
+// parse a given string
 func NewScannerFromString(name, input string) *Scanner {
-	if len(input) == 0 {
-		return nil
-	}
-
 	return &Scanner{
 		name:   name,
 		input:  input,
