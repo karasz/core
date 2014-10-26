@@ -5,14 +5,17 @@ import (
 )
 
 const (
+	// EOF is a dummy rune representing End-Of-File
 	EOF = -1
 )
 
+// A Position in the input string and in the line-based document
 type Position struct {
 	Offset       uint
 	Line, Column uint
 }
 
+// An Scanner represent the low level layer for text parsers
 type Scanner struct {
 	name  string
 	input string
@@ -34,24 +37,24 @@ func NewScannerFromString(name, input string) *Scanner {
 	}
 }
 
-// Current length of the upcomming Terminal
+// Length returns the number of bytes and runes in the Terminal that is been detected
 func (l *Scanner) Length() (uint, uint) {
 	return l.cursor.Offset - l.base.Offset, l.runes
 }
 
-// Is the upcoming Terminal stil empty?
+// Empty tells if there are no runes accounted for the next Terminal yet
 func (l *Scanner) Empty() bool {
 	return l.runes == 0
 }
 
-// Move cursor forward
+// StepForth moves the cursor forward
 func (l *Scanner) StepForth(runes, bytes uint) {
 	l.cursor.Offset += bytes
 	l.cursor.Column += runes
 	l.runes += runes
 }
 
-// Move cursor backward
+// StepBack moves the cursor backward
 func (l *Scanner) StepBack(runes, bytes uint) {
 	l.cursor.Offset -= bytes
 	// FIXME: what if column goes < 1?
@@ -59,13 +62,13 @@ func (l *Scanner) StepBack(runes, bytes uint) {
 	l.runes -= runes
 }
 
-// Moves the cursor back to the back
+// Reset moves the cursor back to the base
 func (l *Scanner) Reset() {
 	l.cursor = l.base
 	l.runes = 0
 }
 
-// Trashes everything up to the cursor
+// Skip trashes everything up to the cursor
 func (l *Scanner) Skip() {
 	l.base = l.cursor
 	l.runes = 0
@@ -77,7 +80,7 @@ func (l *Scanner) NewLine() {
 	l.cursor.Column = 1
 }
 
-// Return the next rune but not moving the cursor
+// Peek returns the next rune but not moving the cursor
 func (l *Scanner) Peek() (rune, uint) {
 	if l.cursor.Offset == uint(len(l.input)) {
 		return EOF, 0
@@ -86,7 +89,7 @@ func (l *Scanner) Peek() (rune, uint) {
 	return r, uint(bytes)
 }
 
-// Return the next rune but moving the cursor
+// Next returns the next rune but moving the cursor
 func (l *Scanner) Next() (rune, uint) {
 	r, bytes := l.Peek()
 	if bytes > 0 {
