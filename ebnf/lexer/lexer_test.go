@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+func newLexer(t *testing.T, str string) *Lexer {
+	return nil
+}
+
 func cmp(t *testing.T, l *Lexer, tokens []*token.Token) {
 	i := 0
 
