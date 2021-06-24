@@ -21,6 +21,13 @@ func (rd *Reader) Read(b []byte) (int, error) {
 	return rd.in.Read(b)
 }
 
+func (rd *Reader) Close() error {
+	if f, ok := rd.in.(io.Closer); ok {
+		return f.Close()
+	}
+	return nil
+}
+
 //
 // Constructors
 //
