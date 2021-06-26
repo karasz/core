@@ -12,6 +12,7 @@ const (
 )
 
 type Reader struct {
+	exp *Expander
 	in  io.Reader
 	buf *bytes.Buffer
 	out *bytes.Buffer
@@ -31,32 +32,33 @@ func (rd *Reader) Close() error {
 //
 // Constructors
 //
-func NewReaderSize(in io.Reader, size int) *Reader {
+func (exp *Expander) NewReaderSize(in io.Reader, size int) *Reader {
 	if size < MinimumBufferSize {
 		size = DefaultBufferSize
 	}
 
 	return &Reader{
+		exp: exp,
 		in:  in,
 		buf: bytes.NewBuffer(make([]byte, 0, size)),
 		out: bytes.NewBuffer(make([]byte, 0, size)),
 	}
 }
 
-func NewReader(in io.Reader) *Reader {
-	return NewReaderSize(in, DefaultBufferSize)
+func (exp *Expander) NewReader(in io.Reader) *Reader {
+	return exp.NewReaderSize(in, DefaultBufferSize)
 }
 
-func NewReaderFileSize(filename string, size int) (*Reader, error) {
+func (exp *Expander) NewReaderFileSize(filename string, size int) (*Reader, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	rd := NewReaderSize(f, size)
+	rd := exp.NewReaderSize(f, size)
 	return rd, nil
 }
 
-func NewReaderFile(filename string) (*Reader, error) {
-	return NewReaderFileSize(filename, DefaultBufferSize)
+func (exp *Expander) NewReaderFile(filename string) (*Reader, error) {
+	return exp.NewReaderFileSize(filename, DefaultBufferSize)
 }
