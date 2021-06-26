@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-var envExpander = &expander{
+var envExpander = &Expander{
 	get: os.Getenv,
 }
 
