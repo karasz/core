@@ -4,7 +4,7 @@ package token
 type TokenType int
 
 const (
-	TokenError	TokenType = iota + 1
+	TokenError TokenType = iota + 1
 	TokenEOF
 )
 
