@@ -20,17 +20,21 @@ type Feeder struct {
 
 // NewFeederBytes creates a new Feeder using an slice of bytes as input
 func NewFeederBytes(b []byte) *Feeder {
-	return &Feeder{in: bytes.NewReader(b)}
+	return NewFeeder(bytes.NewReader(b))
 }
 
 // NewFeederString creates a new Feeder using a string as input
 func NewFeederString(s string) *Feeder {
-	return &Feeder{in: strings.NewReader(s)}
+	return NewFeeder(strings.NewReader(s))
 }
 
-// NewFeederString creates a new Feeder using a string as input
+// NewFeederString creates a new Feeder using a Reader as input
 func NewFeeder(in io.Reader) *Feeder {
-	return &Feeder{in: bufio.NewReader(in)}
+	rd, ok := in.(io.RuneReader)
+	if !ok {
+		rd = bufio.NewReader(in)
+	}
+	return &Feeder{in: rd}
 }
 
 // Skip drops n runes from the head of the buffer
